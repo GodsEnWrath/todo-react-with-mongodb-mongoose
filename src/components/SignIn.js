@@ -12,6 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Formik } from "formik";
 import Axios from "axios";
+import { loginValidation } from "../validate";
 
 function Copyright() {
   return (
@@ -95,7 +96,7 @@ function SignIn(props) {
             email: "",
             password: ""
           }}
-          //   validate={validationForm}
+          validate={loginValidation}
           onSubmit={values => {
             Axios.post(`${API_SERVER}/user/login`, values)
               .then(response => {
@@ -106,7 +107,7 @@ function SignIn(props) {
                     JSON.stringify(response.data.data)
                   );
                   localStorage.setItem("isLogin", true);
-                  props.history.push("/user");
+                  props.history.push("/todo");
                 }
               })
               .catch(error => console.log(error));

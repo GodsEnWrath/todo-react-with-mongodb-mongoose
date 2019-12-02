@@ -14,6 +14,7 @@ import {
     Header,
     SignIn,
     SignUp,
+    TodoMongoose
 } from "./components";
 import Todo from "./components/Todo";
 // import About from "./components/About";
@@ -51,8 +52,11 @@ function App() {
                 <Route path="/signup">
                     <SignUp />
                 </Route>
-                <Route path="/todo">
+                <Route path="/todo/mongo/:email">
                     <Todo />
+                </Route>
+                <Route path="/todo/mongoose">
+                    <TodoMongoose />
                 </Route>
             </Switch>
         </Router>
