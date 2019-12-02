@@ -2,7 +2,7 @@
 import axios from "axios";
 
 export const loginValidation = async values => {
-    const API = process.env.REACT_APP_API_LIVE;
+    const API = process.env.REACT_APP_API_SERVER;
 
     let errors = {};
 
