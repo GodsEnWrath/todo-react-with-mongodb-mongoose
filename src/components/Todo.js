@@ -20,6 +20,7 @@ export default class Todo extends Component {
     super(props);
 
     this.state = {
+      id: "",
       todos: [],
       edit: false,
       todo: ""
@@ -61,6 +62,8 @@ export default class Todo extends Component {
   };
 
   addOne = values => {
+    console.log(values);
+
     const user = JSON.parse(localStorage.getItem("user"));
     axios
       .post(`${API}/todo`, {
@@ -77,21 +80,28 @@ export default class Todo extends Component {
   };
 
   editOne = id => {
+    console.log(id);
+    this.setState({ id: id });
+
     this.setState({ edit: true });
 
     axios.get(`${API}/todo/${id}`).then(response => {
+      console.log(response.data.data.todo);
+
       this.setState({ todo: response.data.data.todo });
     });
   };
 
   updateOne = values => {
+    console.log(values);
+
     axios
-      .put(`${API}/todo/`, {
+      .put(`${API}/todo/${this.state.id}`, {
         ...values
       })
       .then(response => {
-        if (response.status === 201) {
-          Swal.fire("Added!", `Your new todo is added`, "success");
+        if (response.status === 200) {
+          Swal.fire("Added!", `Your todo is Update`, "success");
           this.fetch();
         }
       });
@@ -179,7 +189,7 @@ export default class Todo extends Component {
                               color="textPrimary"
                             >
                               {`todo -
-                               ${item.todo}`}
+                             ${item.todo}`}
                             </Typography>
                           </React.Fragment>
                         }
@@ -187,6 +197,9 @@ export default class Todo extends Component {
                       <EditIcon
                         onClick={() => {
                           this.editOne(item._id);
+                        }}
+                        onDoubleClick={() => {
+                          this.setState({edit:false})
                         }}
                       />
                       <DeleteIcon onClick={() => this.deleteOne(item._id)} />
