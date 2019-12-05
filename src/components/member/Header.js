@@ -1,14 +1,15 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import{verify} from "../../helpers"
 
 function Header(props) {
     const logOut = () => {
-        localStorage.removeItem("isLogin");
+        localStorage.removeItem("token");
 
         props.history.push("/signin");
     };
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    // const user = JSON.parse(localStorage.getItem("user"));
     return (
         <nav>
             <ul
@@ -28,10 +29,13 @@ function Header(props) {
                     <Link to="/contact">Contact</Link>
                 </li>
                 <li style={{ margin: "0 10px" }}>
-                    <Link to={`/todo/mongo/${user.email}`}>Todo Mongo</Link>
+                    <Link to={`/todo/mongo/${verify().email}`}>Todo Mongo</Link>
                 </li>
                 <li style={{ margin: "0 10px" }}>
                     <Link to={`/todo/mongoose`}>Todo Mongoose</Link>
+                </li>
+                <li style={{ margin: "0 10px" }}>
+                    <Link to={`/todo/mysql`}>Todo Mysql</Link>
                 </li>
                 <li style={{ margin: "0 10px" }}>
                     <Link to="/users">Users</Link>

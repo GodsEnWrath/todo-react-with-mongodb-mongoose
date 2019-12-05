@@ -12,6 +12,8 @@ import Swal from "sweetalert2";
 import { Formik, ErrorMessage } from "formik";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import { verify } from"../helpers"
+
 
 const API = process.env.REACT_APP_API_SERVER_2;
 
@@ -31,7 +33,7 @@ export default class TodoMongoose extends Component {
     const user = JSON.parse(localStorage.getItem("user"));
 
     axios
-      .get(`${API}/todos/${user.email}`)
+      .get(`${API}/todos/${verify().email}`)
       .then(response => {
         this.setState({ todos: response.data.data });
       })
@@ -68,9 +70,9 @@ export default class TodoMongoose extends Component {
     axios
       .post(`${API}/todos`, {
         ...values,
-        name: user.firstName,
-        email: user.email,
-        userId: user.id
+        name: verify().firstName,
+        email: verify().email,
+        userId: verify().id
       })
       .then(response => {
         if (response.status === 200) {

@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import axios from "axios";
+import { axios } from "../helpers";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const API_SERVER = process.env.REACT_APP_API_SERVER;
+// const API_SERVER = process.env.REACT_APP_API_SERVER;
 
 function SignUp(props) {
   const classes = useStyles();
@@ -61,8 +61,8 @@ function SignUp(props) {
           }}
           validate={validationForm}
           onSubmit={values => {
-            axios 
-            .post(`${API_SERVER}/user`, values).then(response => {
+            axios()
+            .post(`/user`, values).then(response => {
               if (response.status === 201) {
                 // API_SERVER("todos", JSON.stringify(response.data.data));
                 props.history.push("/signin");

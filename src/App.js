@@ -14,14 +14,15 @@ import {
     Header,
     SignIn,
     SignUp,
-    TodoMongoose
+    TodoMongoose,
+    TodoMysql
 } from "./components";
 import Todo from "./components/Todo";
 // import About from "./components/About";
 // import Contact from "./components/Contact";
 
 function App() {
-    const isLogin = JSON.parse(localStorage.getItem("isLogin"));
+    const token = JSON.parse(localStorage.getItem("token"));
 
     return (
         <Router>
@@ -38,7 +39,7 @@ function App() {
                     <Contact />
                 </Route>
                 <Route path="/" exact={true}>
-                    {isLogin !== true ? <Redirect to="/signin" /> : <Home />}
+                    {token !== true ? <Redirect to="/signin" /> : <Home />}
                 </Route>
                 <Route path="/users" exact={true}>
                     <Users />
@@ -58,6 +59,9 @@ function App() {
                 <Route path="/todo/mongoose">
                     <TodoMongoose />
                 </Route>
+                <Route path="/todo/mysql" exact={true}>
+            <TodoMysql />
+          </Route>
             </Switch>
         </Router>
     );

@@ -26,16 +26,18 @@
 
 
 
-import axios from "axios"
+import {axios} from "../helpers"
 
 export const validationForm = async values => {
-    const API = process.env.REACT_APP_API_SERVER
+    // const API = process.env.REACT_APP_API_SERVER
 
     let errors= {};
 
     try{
-        const {data: result} = await axios.post(
-            `${API}/validate/signup`,
+        const {data: result} = await 
+        axios()
+        .post(
+            `/validate/signup`,
             values
         )
         return { ...errors, ...result}

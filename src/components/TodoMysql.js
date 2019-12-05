@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
@@ -11,11 +12,12 @@ import Swal from "sweetalert2";
 import { Formik, ErrorMessage } from "formik";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { verify, axios } from"../helpers"
+import { verify } from"../helpers"
 
-// const API = process.env.REACT_APP_API_SERVER;
 
-export default class Todo extends Component {
+const API = process.env.REACT_APP_API_SERVER_3;
+
+export default class TodoMongoose extends Component {
   constructor(props) {
     super(props);
 
@@ -28,11 +30,13 @@ export default class Todo extends Component {
   }
 
   fetch = () => {
-    // const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
 
-    axios()
-      .get(`/todo/email/${verify().email}`)
+    axios
+      .get(`${API}/todos/${verify().email}`)
       .then(response => {
+        console.log(response );
+        
         this.setState({ todos: response.data.data });
       })
       .catch(error => {
@@ -45,8 +49,8 @@ export default class Todo extends Component {
   };
 
   deleteOne = id => {
-    axios()
-      .delete(`/todo/${id}`)
+    axios
+      .delete(`${API}/todos/${id}`)
       .then(response => {
         if (response.status === 200) {
           Swal.fire(
@@ -64,15 +68,16 @@ export default class Todo extends Component {
   addOne = values => {
     console.log(values);
 
-    // const user = JSON.parse(localStorage.getItem("user"));
-    axios()
-      .post(`/todo`, {
+    const user = JSON.parse(localStorage.getItem("user"));
+    axios
+      .post(`${API}/todos`, {
         ...values,
         name: verify().firstName,
-        email: verify().email
+        email: verify().email,
+        userId: verify().id
       })
       .then(response => {
-        if (response.status === 201) {
+        if (response.status === 200) {
           Swal.fire("Added!", `Your new todo is added`, "success");
           this.fetch();
         }
@@ -85,8 +90,7 @@ export default class Todo extends Component {
 
     this.setState({ edit: true });
 
-    axios()
-    .get(`/todo/${id}`).then(response => {
+    axios.get(`${API}/todos/${id}`).then(response => {
       console.log(response.data.data.todo);
 
       this.setState({ todo: response.data.data.todo });
@@ -96,8 +100,8 @@ export default class Todo extends Component {
   updateOne = values => {
     console.log(values);
 
-    axios()
-      .put(`/todo/${this.state.id}`, {
+    axios
+      .put(`${API}/todos/${this.state.id}`, {
         ...values
       })
       .then(response => {
@@ -176,6 +180,8 @@ export default class Todo extends Component {
           >
             {this.state.todos.length > 0 &&
               this.state.todos.map((item, key) => {
+                console.log(item);
+                
                 return (
                   <React.Fragment key={key}>
                     <ListItem alignItems="flex-start">
@@ -190,20 +196,20 @@ export default class Todo extends Component {
                               color="textPrimary"
                             >
                               {`todo -
-                             ${item.todo}`}
+                                ${item.todo}`}
                             </Typography>
                           </React.Fragment>
                         }
                       />
                       <EditIcon
                         onClick={() => {
-                          this.editOne(item._id);
+                          this.editOne(item.id);
                         }}
                         onDoubleClick={() => {
-                          this.setState({edit:false})
+                          this.setState({ edit: false });
                         }}
                       />
-                      <DeleteIcon onClick={() => this.deleteOne(item._id)} />
+                      <DeleteIcon onClick={() => this.deleteOne(item.id)} />
                     </ListItem>
                     <Divider variant="middle" component="li" />
                   </React.Fragment>

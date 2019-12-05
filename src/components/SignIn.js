@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import axios from "axios";
+import { axios } from "../helpers";
 import { Formik, ErrorMessage } from "formik";
 import { loginValidation } from "../validate";
 
@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
 function SignIn(props) {
   const classes = useStyles();
 
-  const API = process.env.REACT_APP_API_SERVER;
+  // const API = process.env.REACT_APP_API_SERVER;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -74,13 +74,16 @@ function SignIn(props) {
           }}
           validate={loginValidation}
           onSubmit={values => {
-            axios.post(`${API}/user/login`, values).then(response => {
+            axios()
+            .post(`/user/login`, values).then(response => {
+              console.log(response);
+              
               if (response.status === 200) {
                 localStorage.setItem(
-                  "user",
+                  "token",
                   JSON.stringify(response.data.data)
                 );
-                localStorage.setItem("isLogin", true);
+                // localStorage.setItem("token", true);
                 props.history.push("/todo");
               }
             });
