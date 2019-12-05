@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+// import axios from "axios";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
@@ -12,10 +12,10 @@ import Swal from "sweetalert2";
 import { Formik, ErrorMessage } from "formik";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { verify } from"../helpers"
+import { verify, axiosMysql } from"../helpers"
 
 
-const API = process.env.REACT_APP_API_SERVER_3;
+// const API = process.env.REACT_APP_API_SERVER_3;
 
 export default class TodoMongoose extends Component {
   constructor(props) {
@@ -30,10 +30,10 @@ export default class TodoMongoose extends Component {
   }
 
   fetch = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    // const user = JSON.parse(localStorage.getItem("user"));
 
-    axios
-      .get(`${API}/todos/${verify().email}`)
+    axiosMysql()
+      .get(`/todos/${verify().email}`)
       .then(response => {
         console.log(response );
         
@@ -49,8 +49,8 @@ export default class TodoMongoose extends Component {
   };
 
   deleteOne = id => {
-    axios
-      .delete(`${API}/todos/${id}`)
+    axiosMysql()
+      .delete(`/todos/${id}`)
       .then(response => {
         if (response.status === 200) {
           Swal.fire(
@@ -68,9 +68,9 @@ export default class TodoMongoose extends Component {
   addOne = values => {
     console.log(values);
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    axios
-      .post(`${API}/todos`, {
+    // const user = JSON.parse(localStorage.getItem("user"));
+    axiosMysql()
+      .post(`/todos`, {
         ...values,
         name: verify().firstName,
         email: verify().email,
@@ -90,7 +90,8 @@ export default class TodoMongoose extends Component {
 
     this.setState({ edit: true });
 
-    axios.get(`${API}/todos/${id}`).then(response => {
+    axiosMysql()
+    .get(`/todos/${id}`).then(response => {
       console.log(response.data.data.todo);
 
       this.setState({ todo: response.data.data.todo });
@@ -100,8 +101,8 @@ export default class TodoMongoose extends Component {
   updateOne = values => {
     console.log(values);
 
-    axios
-      .put(`${API}/todos/${this.state.id}`, {
+    axiosMysql()
+      .put(`/todos/${this.state.id}`, {
         ...values
       })
       .then(response => {
